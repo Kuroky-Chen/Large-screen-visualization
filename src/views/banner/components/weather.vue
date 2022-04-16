@@ -7,7 +7,7 @@
       <div>
         <div>{{ weatherInfo.temperature }}℃ {{ weatherInfo.weather }} {{ weatherInfo.winddirection }}风</div>
         <div>相对湿度 {{ weatherInfo.humidity }}%</div>
-        <div>空气指数：优</div>
+        <!-- <div>空气指数：优</div> -->
       </div>
     </div>
     <div>{{ curTime }}</div>
@@ -47,7 +47,7 @@ export default {
     async weatherInit() {
       const params = {
         key: 'c6da8713389df35db8c99611e03410ca',
-        city: '320200',
+        city: '340222',
         extensions: 'base',
         output: 'JSON'
       }

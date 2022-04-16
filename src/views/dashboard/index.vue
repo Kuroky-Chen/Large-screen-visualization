@@ -1,15 +1,22 @@
 <template>
   <div class="wrap">
     <Banner />
+    <component :is="curComponent" />
   </div>
 </template>
 
 <script>
 import Banner from './../banner'
+import IndustryCloud from './../IndustryCloud'
 
 export default {
   name: 'Dashboard',
-  components: { Banner }
+  components: { Banner, IndustryCloud },
+  data() {
+    return {
+      curComponent: 'IndustryCloud'
+    }
+  }
 }
 </script>
 

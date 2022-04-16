@@ -1,7 +1,9 @@
 <template>
   <div class="announcement">
-    <div>公告</div>
-    <div>icon</div>
+    <div class="text">公告</div>
+    <div>
+      <img src="@/assets/u2.svg" alt="">
+    </div>
     <div>{{ content }}</div>
   </div>
 </template>
@@ -31,6 +33,8 @@ export default {
   &>div {
     &:nth-child(1) {
       width: 80px;
+      color: #00ffff;
+      font-size: 24px;
     }
 
     &:nth-child(2) {

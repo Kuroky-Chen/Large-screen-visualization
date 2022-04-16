@@ -44,6 +44,9 @@ export default {
   flex: 1;
   display: flex;
   @include font-color;
+  .item-tab{
+    cursor: pointer;
+  }
 
   .left {
     width: 590px;
@@ -56,6 +59,7 @@ export default {
     justify-content: center;
     align-items: center;
     font-size: 50px;
+    user-select: none;
   }
 
   .right {
