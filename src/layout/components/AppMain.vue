@@ -1,10 +1,14 @@
 <template>
-  <div ref="scaleBox" class="scaleBox" :style="{
-    width: state.width + 'px',
-    height: state.height + 'px',
-    transform: state.transform,
-    marginTop: - state.mtValue + 'px'
-  }">
+  <div
+    ref="scaleBox"
+    class="scaleBox"
+    :style="{
+      width: state.width + 'px',
+      height: state.height + 'px',
+      transform: state.transform,
+      marginTop: - state.mtValue + 'px'
+    }"
+  >
     <slot />
   </div>
 </template>
