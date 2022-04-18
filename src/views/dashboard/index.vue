@@ -8,13 +8,35 @@
 <script>
 import Banner from './../banner'
 import IndustryCloud from './../IndustryCloud'
+import AttractInvestment from './../AttractInvestment'
+import { createNamespacedHelpers } from 'vuex'
+const { mapState, mapMutations } = createNamespacedHelpers('common')
+const enums = {
+  1: 'qv',
+  2: 'jingji',
+  3: 'AttractInvestment',
+  4: 'yuan',
+  5: 'IndustryCloud'
+}
 
 export default {
   name: 'Dashboard',
-  components: { Banner, IndustryCloud },
+  components: { Banner, IndustryCloud, AttractInvestment },
   data() {
     return {
-      curComponent: 'IndustryCloud'
+    }
+  },
+  computed: {
+    ...mapState(['tab']),
+    curComponent() {
+      return enums[this.tab]
+    }
+  },
+  methods: {
+    ...mapMutations(['setTab']),
+
+    onTabClick(val) {
+      this.setTab(val)
     }
   }
 }

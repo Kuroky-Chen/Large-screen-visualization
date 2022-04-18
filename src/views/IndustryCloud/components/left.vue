@@ -284,110 +284,132 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  @mixin chart {
-    width: 450px;
-    height: 650px;
-  }
-  .left{
-    width: 1100px;
-    padding-left: 150px;
-  }
-  .top{
-    display: flex;
-    .t-left{
-      @include chart;
-      margin-right: 50px;
-      .chart-box-text{
-        height: calc(100% - 50px);
-        box-sizing: border-box;
-        overflow: hidden;
-        padding-top: 20px;
-        .item{
+@mixin chart {
+  width: 450px;
+  height: 650px;
+}
+
+.left {
+  width: 1100px;
+  padding-left: 150px;
+}
+
+.top {
+  display: flex;
+
+  .t-left {
+    @include chart;
+    margin-right: 50px;
+
+    .chart-box-text {
+      height: calc(100% - 50px);
+      box-sizing: border-box;
+      overflow: hidden;
+      padding-top: 20px;
+
+      .item {
+        display: flex;
+        padding: 0 50px;
+        margin: 10px 0;
+        height: 50px;
+        line-height: 50px;
+
+        .count {
+          width: 100px;
+          font-size: 30px;
           display: flex;
-          padding: 0 50px;
-          margin: 10px 0;
+
+          .unit {
+            font-size: 15px;
+            padding-top: 4px;
+            padding-left: 4px;
+          }
+        }
+
+        .name {
+          flex: 1;
+          font-size: 22px;
+        }
+
+        .icon {
           height: 50px;
-          line-height: 50px;
-          .count {
-            width: 100px;
-            font-size: 30px;
-            display: flex;
-            .unit{
-              font-size: 15px;
-              padding-top: 4px;
-              padding-left: 4px;
-            }
+          width: 50px;
+          position: relative;
+          margin-right: 15px;
+
+          .icon1 {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: 10;
+            background: url('../../../assets/IndustryCloud/box1.png') no-repeat;
+            background-size: 100% 100%;
           }
-          .name {
-            flex: 1;
+
+          .icon2 {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            margin: 10px 0 0 10px;
+            z-index: 100;
+            background: url('../../../assets/IndustryCloud/icon1.png') no-repeat;
+            background-size: 100% 100%;
+          }
+        }
+      }
+    }
+  }
+
+  .t-right {
+    @include chart;
+
+    .t-r-top {
+      width: 100%;
+      height: 320px;
+      margin-bottom: 10px;
+
+      .chart-box-count {
+        height: calc(100% - 50px);
+        padding: 30px 60px 0;
+
+        .c-item {
+          margin-bottom: 15px;
+
+          .title {
             font-size: 22px;
+            margin-bottom: 5px;
           }
-          .icon{
-            height: 50px;
-            width: 50px;
-            position: relative;
-            margin-right: 15px;
-            .icon1{
-              position: absolute;
-              width: 100%;
-              height: 100%;
-              z-index: 10;
-              background: url('../../../assets/IndustryCloud/box1.png') no-repeat;
-              background-size: 100% 100%;
-            }
-            .icon2{
-              position: absolute;
-              width: 30px;
-              height: 30px;
-              margin: 10px 0 0 10px;
-              z-index: 100;
-              background: url('../../../assets/IndustryCloud/icon1.png') no-repeat;
-              background-size: 100% 100%;
-            }
-          }
-        }
-      }
-    }
-    .t-right {
-      @include chart;
-      .t-r-top{
-        width:100%;
-        height: 320px;
-        margin-bottom: 10px;
-        .chart-box-count{
-          height: calc(100% - 50px);
-          padding: 30px 60px 0;
-          .c-item {
-            margin-bottom: 15px;
-            .title {
+
+          .box {
+            display: flex;
+
+            .unit {
               font-size: 22px;
-              margin-bottom: 5px;
-            }
-            .box {
-              display: flex;
-              .unit{
-                font-size: 22px;
-                padding-top: 40px;
-              }
+              padding-top: 40px;
             }
           }
         }
       }
-      .t-r-bottom{
-        width:100%;
-        height: 320px;
-        .box{
-          height: calc(100% - 50px);
-        }
+    }
+
+    .t-r-bottom {
+      width: 100%;
+      height: 320px;
+
+      .box {
+        height: calc(100% - 50px);
       }
     }
   }
-  .bottom {
-    width: 100%;
-    height: 320px;
-    margin-top:10px;
-    .box{
-      height: calc(320px - 50px);
-    }
+}
+
+.bottom {
+  width: 100%;
+  height: 320px;
+  margin-top: 10px;
+
+  .box {
+    height: calc(320px - 50px);
   }
+}
 </style>

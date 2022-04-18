@@ -12,7 +12,7 @@ import Middle from './components/middle.vue'
 import Right from './components/right.vue'
 
 export default {
-  name: 'IndustryCloud',
+  name: 'AttractInvestment',
   components: { Left, Middle, Right },
   data() {
     return {
