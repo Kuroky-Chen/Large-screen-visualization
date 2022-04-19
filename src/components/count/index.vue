@@ -1,5 +1,6 @@
 <template>
-  <div class="count-box" :style="{marginRight: `${margin}px`,width: `${width}px`,height: `${height}px`, fontSize: `${size}px`}">
+  <div class="count-box"
+    :style="{ marginRight: `${margin}px`, width: `${width}px`, height: `${height}px`, fontSize: `${size}px` }">
     {{ count }}
   </div>
 </template>
@@ -33,11 +34,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .count-box {
-    background: url('../../assets/IndustryCloud/count.png') no-repeat;
-    background-size: 100% 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
+.count-box {
+  background: url('../../assets/IndustryCloud/count.png') no-repeat;
+  background-size: 100% 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 </style>

@@ -107,7 +107,7 @@ export default {
         direction: 1, // 0向下 1向上 2向左 3向右
         // autoPlay: false,
         openWatch: true, // 开启数据实时监控刷新dom
-        singleHeight: 0, // 单步运动停止的高度(默认值0是无缝不停止的滚动) direction => 0/1
+        singleHeight: 46, // 单步运动停止的高度(默认值0是无缝不停止的滚动) direction => 0/1
         singleWidth: 0, // 单步运动停止的宽度(默认值0是无缝不停止的滚动) direction => 2/3
         waitTime: 1000 // 单步运动停止的时间(默认值1000ms)
       }
@@ -220,6 +220,13 @@ export default {
     echarts5Init() {
       const chart = echarts.init(document.getElementById('echarts5'))
       // 绘制图表
+      const data = [402, 1035, 2047, 757, 969, 795]
+      const links = data.map((item, i) => {
+        return {
+          source: i,
+          target: i + 1
+        }
+      })
       const option = {
         grid: {
           left: '6%',
@@ -228,15 +235,17 @@ export default {
           top: '50px',
           containLabel: true
         },
+        tooltip: {},
         xAxis: {
           type: 'category',
-          data: ['1月', '2月', '3月', '4月', '5月', '6月'],
+          boundaryGap: false,
           axisLine: {
             show: true,
             lineStyle: {
               color: '#ffffff'
             }
-          }
+          },
+          data: ['1月', '2月', '3月', '4月', '5月', '6月']
         },
         yAxis: {
           type: 'value',
@@ -256,20 +265,50 @@ export default {
         },
         series: [
           {
-            data: [820, 932, 901, 934, 1290, 1330],
-            type: 'line',
-            itemStyle: {
-              normal: {
-                color: '#95F204', // 改变折线点的颜色
-                lineStyle: {
-                  color: '#95F204' // 改变折线颜色
-                }
-              }
+            type: 'graph',
+            layout: 'none',
+            coordinateSystem: 'cartesian2d',
+            symbolSize: 40,
+            label: {
+              show: true
             },
-            smooth: true
+            edgeSymbol: ['circle', 'arrow'],
+            edgeSymbolSize: [4, 10],
+            data: data,
+            links: links,
+            z: 10,
+            lineStyle: {
+              color: '#2f4554'
+            }
+          },
+
+          {
+            name: 'Line 1',
+            type: 'line',
+            stack: 'Total',
+            lineStyle: {
+              width: 0
+            },
+            showSymbol: false,
+            areaStyle: {
+              opacity: 0.8,
+              color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                {
+                  offset: 0,
+                  color: 'rgb(128, 255, 165)'
+                },
+                {
+                  offset: 1,
+                  color: 'rgb(1, 191, 236)'
+                }
+              ])
+            },
+
+            data: data
           }
         ]
       }
+
       chart.setOption({
         ...option
       })
@@ -302,6 +341,7 @@ export default {
         .box {
           height: calc(100% - 50px);
           overflow: hidden;
+          padding: 0 60px;
           padding-top: 10px;
 
           .title {

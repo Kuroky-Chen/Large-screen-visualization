@@ -188,7 +188,17 @@ export default {
           top: '50px',
           containLabel: true
         },
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            type: 'cross',
+            label: {
+              backgroundColor: '#6a7985'
+            }
+          }
+        },
         xAxis: {
+          boundaryGap: false,
           type: 'category',
           data: ['1月', '2月', '3月', '4月', '5月', '6月'],
           axisLine: {
@@ -218,6 +228,19 @@ export default {
           {
             data: [820, 932, 901, 934, 1290, 1330],
             type: 'line',
+            areaStyle: {
+              opacity: 0.8,
+              color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                {
+                  offset: 0,
+                  color: 'rgb(7,35,58)'
+                },
+                {
+                  offset: 1,
+                  color: 'rgb(9,151,170)'
+                }
+              ])
+            },
             itemStyle: {
               normal: {
                 color: '#61A5E8', // 改变折线点的颜色
@@ -225,11 +248,11 @@ export default {
                   color: '#61A5E8' // 改变折线颜色
                 }
               }
-            },
-            smooth: true
+            }
           }
         ]
       }
+
       chart.setOption({
         ...option
       })
@@ -238,6 +261,16 @@ export default {
       const chart = echarts.init(document.getElementById('echarts2'))
       // 绘制图表
       const option = {
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            type: 'cross',
+            label: {
+              backgroundColor: '#6a7985'
+            }
+          }
+        },
+
         grid: {
           left: '6%',
           right: '10%',
@@ -245,60 +278,92 @@ export default {
           top: '50px',
           containLabel: true
         },
-        xAxis: {
-          type: 'category',
-          data: ['6月', '7月', '8月', '9月', '10月', '11月', '12月'],
-          axisLine: {
-            show: true,
-            lineStyle: {
-              color: '#ffffff'
+        xAxis: [
+          {
+            type: 'category',
+            boundaryGap: false,
+            data: ['6月', '7月', '8月', '9月', '10月', '11月', '12月'],
+            axisLine: {
+              show: true,
+              lineStyle: {
+                color: '#ffffff'
+              }
             }
           }
-        },
-        yAxis: {
-          type: 'value',
-          axisLine: {
-            show: true,
-            lineStyle: {
-              color: '#ffffff'
-            }
-          },
-          splitLine: {
-            // 修改背景线条样式
-            show: true, // 是否展示
-            lineStyle: {
-              color: '#ffffff'
+        ],
+        yAxis: [
+          {
+            type: 'value',
+            axisLine: {
+              show: true,
+              lineStyle: {
+                color: '#ffffff'
+              }
+            },
+            splitLine: {
+              // 修改背景线条样式
+              show: true, // 是否展示
+              lineStyle: {
+                color: '#ffffff'
+              }
             }
           }
-        },
+        ],
         series: [
           {
-            data: [820, 932, 901, 934, 1290, 1330],
+            name: 'Line 1',
             type: 'line',
-            showSymbol: false,
-            itemStyle: {
-              normal: {
-                color: '#7ECF51', // 改变折线点的颜色
-                lineStyle: {
-                  color: '#7ECF51' // 改变折线颜色
-                }
-              }
+            stack: 'Total',
+            lineStyle: {
+              width: 0
             },
-            smooth: true
+            showSymbol: false,
+            smooth: true,
+            areaStyle: {
+              opacity: 0.8,
+              color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                {
+                  offset: 0,
+                  color: 'rgb(128, 255, 165)'
+                },
+                {
+                  offset: 1,
+                  color: 'rgb(1, 191, 236)'
+                }
+              ])
+            },
+            emphasis: {
+              focus: 'series'
+            },
+            data: [140, 232, 101, 264, 90, 340, 250]
           },
+
           {
-            data: [20, 32, 21, 34, 290, 330],
+            name: 'Line 4',
             type: 'line',
-            showSymbol: false,
-            itemStyle: {
-              normal: {
-                color: '#EC808D', // 改变折线点的颜色
-                lineStyle: {
-                  color: '#EC808D' // 改变折线颜色
-                }
-              }
+            stack: 'Total',
+            smooth: true,
+            lineStyle: {
+              width: 0
             },
-            smooth: true
+            showSymbol: false,
+            areaStyle: {
+              opacity: 0.8,
+              color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                {
+                  offset: 0,
+                  color: 'rgb(255, 0, 135)'
+                },
+                {
+                  offset: 1,
+                  color: 'rgb(135, 0, 157)'
+                }
+              ])
+            },
+            emphasis: {
+              focus: 'series'
+            },
+            data: [220, 402, 231, 134, 190, 230, 120]
           }
         ]
       }

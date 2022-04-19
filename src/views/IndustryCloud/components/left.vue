@@ -116,11 +116,6 @@ export default {
           }
         },
 
-        toolbox: {
-          feature: {
-            saveAsImage: {}
-          }
-        },
         xAxis: [
           {
             type: 'category',
