@@ -78,15 +78,42 @@
         <SubTitle title="行业占比 TOP3" />
         <div class="box">
           <div class="img-box" />
+          <div class="text-item t1">
+            <div>原材料</div>
+            <div>30.76%</div>
+          </div>
+          <div class="text-item t2">
+            <div>新能源</div>
+            <div>24.65%</div>
+          </div>
+          <div class="text-item t3">
+            <div>食品健康</div>
+            <div>24.45%</div>
+          </div>
         </div>
       </div>
       <div class="t-mid">
         <SubTitle title="区域固定资产总值" />
-        <div class="box">1</div>
+        <div id="echarts5" class="box">1</div>
       </div>
       <div class="t-bottom">
         <SubTitle title="上市公司概览" />
-        <div class="box">1</div>
+        <div class="box">
+          <div class="th">
+            <div>公司名</div>
+            <div>注册地</div>
+            <div>所属行业</div>
+          </div>
+          <div class="b-table">
+            <vue-seamless-scroll :data="listedCompany" class="seamless-warp" :class-option="optionSetting">
+              <div v-for="(item, i) in listedCompany" :key="i" class="td">
+                <div>{{ item.name }}</div>
+                <div>{{ item.region }}</div>
+                <div>{{ item.industry }}</div>
+              </div>
+            </vue-seamless-scroll>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -97,10 +124,11 @@ import SubTitle from '@/components/Subtitle'
 import CountTo from 'vue-count-to'
 import * as echarts from 'echarts'
 import 'echarts-liquidfill/src/liquidFill.js'
+import vueSeamlessScroll from 'vue-seamless-scroll'
 
 export default {
   name: 'Right',
-  components: { SubTitle, CountTo },
+  components: { SubTitle, CountTo, vueSeamlessScroll },
   data() {
     return {
       datas: [{
@@ -115,11 +143,41 @@ export default {
         name: '平均税收'
       }, {
         name: '平均资产\n投入强度'
+      }],
+      listedCompany: [{
+        name: '安徽美佳',
+        region: '县经开区',
+        industry: '新材料'
       }]
+    }
+  },
+  computed: {
+    optionSetting() {
+      return {
+        step: 0.5, // 数值越大速度滚动越快
+        limitMoveNum: 2, // 开始无缝滚动的数据量 this.dataList.length
+        hoverStop: true, // 是否开启鼠标悬停stop
+        direction: 1, // 0向下 1向上 2向左 3向右
+        // autoPlay: false,
+        openWatch: true, // 开启数据实时监控刷新dom
+        singleHeight: 0, // 单步运动停止的高度(默认值0是无缝不停止的滚动) direction => 0/1
+        singleWidth: 0, // 单步运动停止的宽度(默认值0是无缝不停止的滚动) direction => 2/3
+        waitTime: 1000 // 单步运动停止的时间(默认值1000ms)
+      }
+    }
+  },
+  created() {
+    for (let i = 0; i < 50; i++) {
+      this.listedCompany.push({
+        name: '安徽美佳',
+        region: '县经开区',
+        industry: '新材料'
+      })
     }
   },
   mounted() {
     this.echarts4Init()
+    this.echarts5Init()
   },
   methods: {
     echarts4Init() {
@@ -219,6 +277,130 @@ export default {
           ...option
         })
       })
+    },
+    echarts5Init() {
+      const chart = echarts.init(document.getElementById('echarts5'))
+      // 绘制图表
+      const option = {
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            type: 'cross',
+            label: {
+              backgroundColor: '#6a7985'
+            }
+          }
+        },
+        legend: {
+          top: '10px',
+          right: '5%',
+          textStyle: {
+            color: '#fff'
+          }
+        },
+        title: {
+          text: '单位： 万元',
+          top: '8px',
+          textStyle: {
+            color: '#fff'
+          }
+        },
+        grid: {
+          left: '6%',
+          right: '10%',
+          bottom: '5%',
+          top: '50px',
+          containLabel: true
+        },
+        xAxis: [
+          {
+            type: 'category',
+            boundaryGap: false,
+            data: ['2016', '2017', '2018', '2019', '2020', '2021', '2022'],
+            axisLine: {
+              show: true,
+              lineStyle: {
+                color: '#ffffff'
+              }
+            }
+          }
+        ],
+        yAxis: [
+          {
+            type: 'value',
+            axisLine: {
+              show: false,
+              lineStyle: {
+                color: '#ffffff'
+              }
+            },
+            splitLine: {
+              // 修改背景线条样式
+              show: false // 是否展示
+            }
+          }
+        ],
+        series: [
+          {
+            name: '当年',
+            type: 'line',
+            stack: 'Total',
+            lineStyle: {
+              width: 0
+            },
+            showSymbol: false,
+            smooth: true,
+            areaStyle: {
+              opacity: 0.8,
+              color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                {
+                  offset: 0,
+                  color: 'rgb(128, 255, 165)'
+                },
+                {
+                  offset: 1,
+                  color: 'rgb(1, 191, 236)'
+                }
+              ])
+            },
+            emphasis: {
+              focus: 'series'
+            },
+            data: [1400, 2320, 1001, 2064, 4000, 3400, 2500]
+          },
+          {
+            name: '同比去年',
+            type: 'line',
+            stack: 'Total',
+            smooth: true,
+            lineStyle: {
+              width: 0
+            },
+            showSymbol: false,
+            areaStyle: {
+              opacity: 0.8,
+              color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                {
+                  offset: 0,
+                  color: 'rgb(7,35,58)'
+                },
+                {
+                  offset: 1,
+                  color: 'rgb(9,151,170)'
+                }
+              ])
+            },
+            emphasis: {
+              focus: 'series'
+            },
+            data: [2200, 1320, 1301, 3064, 4400, 3400, 2500]
+          }
+        ]
+      }
+
+      chart.setOption({
+        ...option
+      })
     }
   }
 }
@@ -316,7 +498,43 @@ export default {
         height: calc(100% - 50px);
         position: relative;
 
-        .img-box {}
+        .img-box {
+          position: absolute;
+          top: 47px;
+          left: 113px;
+          width: 224px;
+          height: 166px;
+          background: url('../../../assets/RegionalPanorama/icon7.png') no-repeat;
+          background-size: 100% 100%;
+        }
+
+        .text-item {
+          position: absolute;
+
+          &>div:nth-child(2) {
+            color: #fff;
+          }
+
+          &.t1 {
+            top: 31px;
+            left: 97px;
+          }
+
+          &.t2 {
+            top: 142px;
+            left: 325px;
+          }
+
+          &.t3 {
+            top: 161px;
+            left: 58px;
+          }
+
+          &.t4 {
+            top: 215px;
+            left: 175px;
+          }
+        }
       }
     }
 
@@ -334,6 +552,44 @@ export default {
 
       .box {
         height: calc(100% - 50px);
+        padding: 0 54px;
+
+        .th,
+        .td {
+          display: flex;
+          height: 40px;
+          line-height: 40px;
+
+          &>div {
+            &:nth-child(1) {
+              flex: 1;
+            }
+
+            &:nth-child(2) {
+              width: 100px;
+            }
+
+            &:nth-child(3) {
+              width: 100px;
+              text-align: center;
+            }
+          }
+        }
+
+        .th {
+          color: #fff;
+          margin-top: 20px;
+        }
+
+        .b-table {
+          height: calc(100% - 40px);
+
+          .seamless-warp {
+            height: 100%;
+            overflow: hidden;
+          }
+        }
+
       }
     }
   }

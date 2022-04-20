@@ -10,19 +10,21 @@ import Banner from './../banner'
 import IndustryCloud from './../IndustryCloud'
 import AttractInvestment from './../AttractInvestment'
 import RegionalPanorama from './../RegionalPanorama'
+import EconomicMonitor from './../EconomicMonitor'
+import IndustryMap from './../IndustryMap'
 import { createNamespacedHelpers } from 'vuex'
 const { mapState, mapMutations } = createNamespacedHelpers('common')
 const enums = {
   1: 'RegionalPanorama',
-  2: 'jingji',
+  2: 'EconomicMonitor',
   3: 'AttractInvestment',
-  4: 'yuan',
+  4: 'IndustryMap',
   5: 'IndustryCloud'
 }
 
 export default {
   name: 'Dashboard',
-  components: { Banner, IndustryCloud, AttractInvestment, RegionalPanorama },
+  components: { Banner, IndustryMap, EconomicMonitor, IndustryCloud, AttractInvestment, RegionalPanorama },
   data() {
     return {
     }

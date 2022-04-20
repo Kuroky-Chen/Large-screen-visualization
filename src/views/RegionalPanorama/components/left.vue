@@ -480,11 +480,7 @@ export default {
             symbolSize: [30, 12],
             zlevel: -1
           }
-        ],
-        tooltip: {
-          trigger: 'axis',
-          show: true
-        }
+        ]
       }
 
       chart.setOption({

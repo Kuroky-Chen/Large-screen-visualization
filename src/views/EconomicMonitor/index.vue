@@ -12,7 +12,7 @@ import Middle from './components/middle.vue'
 import Right from './components/right.vue'
 
 export default {
-  name: 'RegionalPanorama',
+  name: 'EconomicMonitor',
   components: { Left, Middle, Right },
   data() {
     return {
