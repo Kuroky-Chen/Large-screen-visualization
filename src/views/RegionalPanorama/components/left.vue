@@ -109,7 +109,7 @@
           <div class="box">
             <div class="item">
               <div class="bg">
-                <div class="content">
+                <div class="content bounce">
                   <div>计划投资额</div>
                   <div>8613万</div>
                 </div>
@@ -117,7 +117,7 @@
             </div>
             <div class="item">
               <div class="bg">
-                <div class="content">
+                <div class="content bounce">
                   <div>新增投资额</div>
                   <div>8613万</div>
                 </div>
@@ -125,7 +125,7 @@
             </div>
             <div class="item">
               <div class="bg">
-                <div class="content">
+                <div class="content bounce">
                   <div>去年计划投资</div>
                   <div>8613万</div>
                 </div>
@@ -133,7 +133,7 @@
             </div>
             <div class="item">
               <div class="bg">
-                <div class="content">
+                <div class="content bounce">
                   <div>去年新增投资</div>
                   <div>8613万</div>
                 </div>
@@ -144,7 +144,10 @@
       </div>
       <div class="b-right">
         <SubTitle title="载体分布" />
-        <div class="box">
+        <div id="echarts2" class="box">
+          123
+        </div>
+        <div id="echarts3" class="box">
           123
         </div>
       </div>
@@ -162,7 +165,8 @@ export default {
   components: { SubTitle, CountTo },
   mounted() {
     this.echarts1Init()
-    // this.echarts2Init()
+    this.echarts2Init()
+    this.echarts3Init()
   },
   methods: {
     echarts1Init() {
@@ -173,7 +177,7 @@ export default {
           trigger: 'axis'
         },
         legend: {
-          top: '15px',
+          top: '20px',
           textStyle: {
             color: '#fff'
           },
@@ -248,95 +252,246 @@ export default {
     echarts2Init() {
       const chart = echarts.init(document.getElementById('echarts2'))
       // 绘制图表
+
+      const salvProName = [
+        '商业面积',
+        '写字楼面积',
+        '厂房面积',
+        '住宅面积',
+        '公共设施面积'
+      ]
+      const salvProValue = [1355, 1165, 1512, 1772, 5139]
       const option = {
         grid: {
           left: '6%',
           right: '10%',
-          bottom: '1%',
-          top: '50px',
+          bottom: '2%',
+          top: '5%',
           containLabel: true
         },
-        backgroundColor: 'transparent',
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            type: 'none'
+          },
+          formatter: function (params) {
+            return params[0].name + ' : ' + params[0].value
+          }
+        },
+        xAxis: {
+          show: false,
+          type: 'value'
+        },
+        yAxis: [
+          {
+            type: 'category',
+            inverse: true,
+            axisLabel: {
+              show: true,
+              textStyle: {
+                color: '#fff'
+              }
+            },
+            splitLine: {
+              show: false
+            },
+            axisTick: {
+              show: false
+            },
+            axisLine: {
+              show: false
+            },
+            data: salvProName
+          },
+          {
+            type: 'category',
+            inverse: true,
+            axisTick: 'none',
+            axisLine: 'none',
+            show: true,
+            axisLabel: {
+              formatter: '{value} k㎡',
+              textStyle: {
+                color: '#ffffff',
+                fontSize: '12'
+              }
+            },
+            data: salvProValue
+          }
+        ],
+        series: [
+          {
+            name: '值',
+            type: 'bar',
+            zlevel: 1,
+            itemStyle: {
+              normal: {
+                barBorderRadius: 30,
+                color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
+                  {
+                    offset: 0,
+                    color: 'rgb(57,89,255,0.8)'
+                  },
+                  {
+                    offset: 1,
+                    color: 'rgb(46,200,207,1)'
+                  }
+                ])
+              }
+            },
+            barWidth: 20,
+            data: salvProValue
+          },
+          {
+            name: '背景',
+            type: 'bar',
+            barWidth: 20,
+            barGap: '-100%',
+            data: [8000, 8000, 8000, 8000, 8000],
+            itemStyle: {
+              normal: {
+                color: 'rgba(99,202,255,.5)',
+                barBorderRadius: 30
+              }
+            }
+          }
+        ]
+      }
+      chart.setOption({
+        ...option
+      })
+    },
+    echarts3Init() {
+      const chart = echarts.init(document.getElementById('echarts3'))
+      // 绘制图表
+      const option = {
         title: {
-          text: '单位： 万元',
+          text: '单位： m³',
           top: '8px',
           textStyle: {
             color: '#fff'
           }
         },
-        tooltip: {
-          trigger: 'axis',
-          axisPointer: {
-            type: 'shadow'
-          }
+        color: [
+          'rgba(99,202,255,.5)',
+          '#49beff'
+        ],
+        text: {},
+        grid: {
+          left: '6%',
+          right: '10%',
+          bottom: '5%',
+          top: '40px',
+          containLabel: true
         },
         xAxis: {
-          data: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
-          axisLabel: {
-            color: '#fff'
-          },
-          axisTick: {
-            show: false
-          },
           axisLine: {
             show: false
-          }
+          },
+          axisTick: {
+            // y轴刻度线
+            show: false
+          },
+          axisLabel: {
+            color: '#fff',
+            margin: 18
+          },
+          data: ['规划面积', '在建面积', '已建面积', '空余面积'],
+          type: 'category'
         },
         yAxis: {
-          axisLine: {
-            show: false
-          },
-          axisTick: {
-            show: false
-          },
-          axisLabel: {
-            color: '#fff'
-          }
-        },
-        legend: {
-          right: '5%',
-          textStyle: {
-            color: '#fff'
-          }
+          show: false
         },
         series: [
           {
-            name: '当月',
+            data: [200, 85, 112, 275],
             type: 'bar',
-            barWidth: 15,
+            barMaxWidth: 'auto',
+            barWidth: 30,
             itemStyle: {
-              normal: {
-                barBorderRadius: [15, 15, 0, 0],
-                color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-                  { offset: 0, color: 'rgb(0, 227, 210)' },
-                  { offset: 1, color: 'rgb(63, 119, 233) ' }
-                ])
+              color: {
+                x: 0,
+                y: 0,
+                x2: 0,
+                y2: 1,
+                type: 'linear',
+                global: false,
+                colorStops: [
+                  {
+                    offset: 0,
+                    color: '#0b9eff'
+                  },
+                  {
+                    offset: 1,
+                    color: '#63caff'
+                  }
+                ]
               }
             },
-            data: [3000, 5000, 4000, 2000, 8000, 5000, 7000, 3000, 5000, 4000, 2000, 9000]
+            label: {
+              show: true,
+              position: 'top',
+              distance: 10,
+              color: '#fff'
+            }
           },
           {
-            name: '上月',
+            data: [1, 1, 1, 1],
+            type: 'pictorialBar',
+            barMaxWidth: '20',
+            symbol: 'diamond',
+            symbolOffset: [0, '50%'],
+            symbolSize: [30, 15]
+          },
+          {
+            data: [200, 85, 112, 275],
+            type: 'pictorialBar',
+            barMaxWidth: '20',
+            symbolPosition: 'end',
+            symbol: 'diamond',
+            symbolOffset: [0, '-50%'],
+            symbolSize: [30, 12],
+            zlevel: 2
+          },
+          {
+            data: [741, 741, 741, 741],
             type: 'bar',
-            barWidth: 15,
-            itemStyle: {
-              normal: {
-                barBorderRadius: [15, 15, 0, 0],
-                color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-                  { offset: 0, color: 'rgb(252,132,137)' },
-                  { offset: 1, color: 'rgb(253,199,85)' }
-                ])
-              }
-            },
-            data: [3000, 5000, 4000, 2000, 8000, 5000, 7000, 3000, 5000, 4000, 2000, 9000]
+            barMaxWidth: 'auto',
+            barWidth: 30,
+            barGap: '-100%',
+            zlevel: -1
+          },
+          {
+            data: [1, 1, 1, 1],
+            type: 'pictorialBar',
+            barMaxWidth: '20',
+            symbol: 'diamond',
+            symbolOffset: [0, '50%'],
+            symbolSize: [30, 15],
+            zlevel: -2
+          },
+          {
+            data: [741, 741, 741, 741],
+            type: 'pictorialBar',
+            barMaxWidth: '20',
+            symbolPosition: 'end',
+            symbol: 'diamond',
+            symbolOffset: [0, '-50%'],
+            symbolSize: [30, 12],
+            zlevel: -1
           }
-        ]
+        ],
+        tooltip: {
+          trigger: 'axis',
+          show: true
+        }
       }
 
       chart.setOption({
         ...option
       })
     }
+
   }
 }
 </script>
@@ -345,6 +500,10 @@ export default {
 @mixin chart {
   width: 450px;
   height: 320px;
+}
+
+.bounce {
+  animation: bounce 1s infinite;
 }
 
 .left {
@@ -485,8 +644,10 @@ export default {
 
       .b-l-bottom {
         @include chart;
+        height: 340px;
 
         .box {
+          padding-top: 20px;
           height: calc(100% - 50px);
           display: flex;
           flex-wrap: wrap;
@@ -530,6 +691,18 @@ export default {
     .b-right {
       @include chart;
       height: 650px;
+
+      &>div {
+        &:nth-child(2) {
+          height: 350px;
+          margin-bottom: 10px;
+        }
+
+        &:nth-child(3) {
+          height: 250px;
+        }
+
+      }
     }
   }
 }

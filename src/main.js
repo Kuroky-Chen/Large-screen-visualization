@@ -14,6 +14,8 @@ import router from './router'
 
 import '@/permission' // permission control
 
+import animated from 'animate.css'
+Vue.use(animated)
 /**
  * If you don't want to use mock-server
  * you want to use MockJs for mock api

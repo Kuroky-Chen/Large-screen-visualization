@@ -1,13 +1,11 @@
 <template>
   <div class="weather">
     <div v-if="weatherInfo" class="detail">
-      <div>
-        图片
-      </div>
+      <div :class="{ rain: weatherIcon === 'rain' }" />
       <div>
         <div>{{ weatherInfo.temperature }}℃ {{ weatherInfo.weather }} {{ weatherInfo.winddirection }}风</div>
         <div>相对湿度 {{ weatherInfo.humidity }}%</div>
-        <!-- <div>空气指数：优</div> -->
+        <div>空气指数：优</div>
       </div>
     </div>
     <div>{{ curTime }}</div>
@@ -24,7 +22,8 @@ export default {
     return {
       curTime: null,
       timer: null,
-      weatherInfo: null
+      weatherInfo: null,
+      weatherIcon: 'sun'
     }
   },
   mounted() {
@@ -55,6 +54,7 @@ export default {
       const { lives } = await getWeather(params)
       this.weatherInfo = lives ? lives[0] : null
       console.log(this.weatherInfo)
+      if (this.weatherInfo.weather.includes('雨')) this.weatherIcon = 'rain'
     }
   }
 }
@@ -75,6 +75,21 @@ export default {
     align-items: center;
     justify-content: space-between;
     font-size: 20px;
+
+    &>div {
+      &:nth-child(1) {
+        width: 50px;
+        height: 50px;
+        background: url('../../../assets/weather.png') no-repeat;
+        background-size: 300px 300px;
+        background-position: 5px 5px;
+        margin-right: 10px;
+
+        &.rain {
+          background-position: -245px 5px;
+        }
+      }
+    }
   }
 }
 </style>
