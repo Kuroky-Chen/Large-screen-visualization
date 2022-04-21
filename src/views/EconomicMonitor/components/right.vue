@@ -64,7 +64,6 @@ export default {
 .right {
   width: 1100px;
   padding-right: 150px;
-  border: 1px solid #fff;
 
   .top {
     display: flex;
