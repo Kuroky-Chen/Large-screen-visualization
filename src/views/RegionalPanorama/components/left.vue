@@ -499,7 +499,8 @@ export default {
 }
 
 .bounce {
-  animation: bounce 1s infinite;
+  animation: custom-bounce .8s infinite 0.5s both;
+  transform-origin: center bottom;
 }
 
 .left {

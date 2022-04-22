@@ -7,15 +7,18 @@ import 'element-ui/lib/theme-chalk/index.css'
 import locale from 'element-ui/lib/locale/lang/en' // lang i18n
 
 import '@/styles/index.scss' // global css
-
+import 'view-design/dist/styles/iview.css'
 import App from './App'
 import store from './store'
 import router from './router'
 
 import '@/permission' // permission control
 
-import animated from 'animate.css'
-Vue.use(animated)
+// import animated from 'animate.css'
+// Vue.use(animated)
+
+import { Progress } from 'view-design'
+Vue.component('Progress', Progress)
 /**
  * If you don't want to use mock-server
  * you want to use MockJs for mock api
