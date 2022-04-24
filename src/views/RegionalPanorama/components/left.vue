@@ -269,15 +269,15 @@ export default {
           top: '5%',
           containLabel: true
         },
-        tooltip: {
-          trigger: 'axis',
-          axisPointer: {
-            type: 'none'
-          },
-          formatter: function (params) {
-            return params[0].name + ' : ' + params[0].value
-          }
-        },
+        // tooltip: {
+        //   trigger: 'axis',
+        //   axisPointer: {
+        //     type: 'none'
+        //   },
+        //   formatter: function (params) {
+        //     return params[0].name + ' : ' + params[0].value
+        //   }
+        // },
         xAxis: {
           show: false,
           type: 'value'
