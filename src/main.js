@@ -14,9 +14,6 @@ import router from './router'
 
 import '@/permission' // permission control
 
-// import animated from 'animate.css'
-// Vue.use(animated)
-
 import { Progress } from 'view-design'
 Vue.component('Progress', Progress)
 /**
