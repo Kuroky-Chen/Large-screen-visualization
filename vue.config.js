@@ -32,10 +32,14 @@ module.exports = {
     port: port,
     open: true,
     proxy: {
-      '/api': {
-        target: process.env.VUE_APP_BASE_API,
+      [process.env.VUE_APP_BASE_API]: {
+        target: process.env.VUE_APP_BASE_URL,
+        ws: true,
         changeOrigin: true,
-        secure: false
+        secure: false,
+        pathRewrite: {
+          ['^' + process.env.VUE_APP_BASE_API]: ''
+        }
       }
     },
     overlay: {
