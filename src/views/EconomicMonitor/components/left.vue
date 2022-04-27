@@ -98,7 +98,7 @@
                   <div class="icon bounce" />
                 </div>
                 <div class="i-l-right">
-                  <div>项目名称</div>
+                  <div>海宝</div>
                   <div>项目投资额</div>
                   <div>项目补贴</div>
                   <div>占比</div>

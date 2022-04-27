@@ -6,7 +6,7 @@ function resolve(dir) {
   return path.join(__dirname, dir)
 }
 
-const name = defaultSettings.title || '项目名称' // page title
+const name = defaultSettings.title || '海宝' // page title
 
 // If your port is set to 80,
 // use administrator privileges to execute the command line.
@@ -31,6 +31,13 @@ module.exports = {
   devServer: {
     port: port,
     open: true,
+    proxy: {
+      '/api': {
+        target: process.env.VUE_APP_BASE_API,
+        changeOrigin: true,
+        secure: false
+      }
+    },
     overlay: {
       warnings: false,
       errors: true

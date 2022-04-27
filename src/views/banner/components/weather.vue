@@ -51,10 +51,13 @@ export default {
         output: 'JSON'
       }
 
-      const { lives } = await getWeather(params)
-      this.weatherInfo = lives ? lives[0] : null
-      console.log(this.weatherInfo)
-      if (this.weatherInfo.weather.includes('雨')) this.weatherIcon = 'rain'
+      try {
+        const { lives } = await getWeather(params)
+        this.weatherInfo = lives ? lives[0] : null
+        if (this.weatherInfo.weather.includes('雨')) this.weatherIcon = 'rain'
+      } finally {
+        console.log('天气：', this.weatherInfo)
+      }
     }
   }
 }

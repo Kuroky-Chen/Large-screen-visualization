@@ -1,6 +1,6 @@
 module.exports = {
 
-  title: '项目名称',
+  title: '海宝',
 
   /**
    * @type {boolean} true | false

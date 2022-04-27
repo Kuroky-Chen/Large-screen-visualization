@@ -9,7 +9,7 @@
             <div>常住人口</div>
             <div>
               <div>
-                <CountTo :start-val="0" :end-val="10000" :duration="8000" separator="" />
+                <CountTo :start-val="0" :end-val="relations.permanentPeopleCount" :duration="8000" separator="" />
               </div>
               <div class="unit">
                 万人
@@ -21,7 +21,7 @@
             <div>本地户籍人口</div>
             <div>
               <div>
-                <CountTo :start-val="0" :end-val="10000" :duration="8000" separator="" />
+                <CountTo :start-val="0" :end-val="relations.localPeopleCount" :duration="8000" separator="" />
               </div>
               <div class="unit">
                 万人
@@ -33,7 +33,7 @@
             <div>外地务工人口</div>
             <div>
               <div>
-                <CountTo :start-val="0" :end-val="10000" :duration="8000" separator="" />
+                <CountTo :start-val="0" :end-val="relations.foreignPeopleCount" :duration="8000" separator="" />
               </div>
               <div class="unit">
                 万人
@@ -45,7 +45,7 @@
             <div>社会保险覆盖率</div>
             <div>
               <div>
-                <CountTo :start-val="0" :end-val="99" :duration="8000" separator="" />
+                <CountTo :start-val="0" :end-val="relations.socialSecurity" :duration="8000" separator="" />
               </div>
               <div class="unit">
                 %
@@ -57,7 +57,7 @@
             <div>社会监控覆盖率</div>
             <div>
               <div>
-                <CountTo :start-val="0" :end-val="99" :duration="8000" separator="" />
+                <CountTo :start-val="0" :end-val="relations.security" :duration="8000" separator="" />
               </div>
               <div class="unit">
                 %
@@ -78,17 +78,9 @@
         <SubTitle title="行业占比 TOP3" />
         <div class="box">
           <div class="img-box" />
-          <div class="text-item t1">
-            <div>原材料</div>
-            <div>30.76%</div>
-          </div>
-          <div class="text-item t2">
-            <div>新能源</div>
-            <div>24.65%</div>
-          </div>
-          <div class="text-item t3">
-            <div>食品健康</div>
-            <div>24.45%</div>
+          <div v-for="(item, i) in top3" :key="i" class="text-item" :class="`t${i + 1}`">
+            <div>{{ item.industryCategoryName }}</div>
+            <div>{{ item.industryCount }}%</div>
           </div>
         </div>
       </div>
@@ -107,9 +99,9 @@
           <div class="b-table">
             <vue-seamless-scroll :data="listedCompany" class="seamless-warp" :class-option="optionSetting">
               <div v-for="(item, i) in listedCompany" :key="i" class="td">
-                <div>{{ item.name }}</div>
-                <div>{{ item.region }}</div>
-                <div>{{ item.industry }}</div>
+                <div>{{ item.enterpriseName }}</div>
+                <div>{{ item.registeredAdress }}</div>
+                <div>{{ item.industryName }}</div>
               </div>
             </vue-seamless-scroll>
           </div>
@@ -125,6 +117,8 @@ import CountTo from 'vue-count-to'
 import * as echarts from 'echarts'
 import 'echarts-liquidfill/src/liquidFill.js'
 import vueSeamlessScroll from 'vue-seamless-scroll'
+import { getSocialInformation, getIndustryProportionTOP3, getRegionalFixedAssetsList, getListedEnterpriseList } from '@/api/RegionalPanorama'
+import { orderBy } from 'lodash-es'
 
 export default {
   name: 'Right',
@@ -144,11 +138,10 @@ export default {
       }, {
         name: '平均资产\n投入强度'
       }],
-      listedCompany: [{
-        name: '安徽美佳',
-        region: '县经开区',
-        industry: '新材料'
-      }]
+      listedCompany: [],
+      relations: {},
+      top3: {},
+      fixedAssets: []
     }
   },
   computed: {
@@ -167,19 +160,56 @@ export default {
     }
   },
   created() {
-    for (let i = 0; i < 50; i++) {
-      this.listedCompany.push({
-        name: '安徽美佳',
-        region: '县经开区',
-        industry: '新材料'
-      })
-    }
+    this.getData_relation()
+    this.getData_top3()
+    this.getData_overview()
+    this.getData_assets()
   },
   mounted() {
     this.echarts4Init()
-    this.echarts5Init()
   },
   methods: {
+    // 区域固定资产总值
+    async getData_assets() {
+      try {
+        const { data } = await getRegionalFixedAssetsList()
+        this.fixedAssets = data
+        this.echarts5Init()
+      } finally {
+        console.log(`区域固定资产总值`, this.fixedAssets)
+      }
+    },
+
+    // 上市公司概览
+    async getData_overview() {
+      try {
+        const { data } = await getListedEnterpriseList()
+        this.listedCompany = data
+      } finally {
+        console.log(`上市公司概览`, this.listedCompany)
+      }
+    },
+
+    // 行业占比TOP3
+    async getData_top3() {
+      try {
+        const { data } = await getIndustryProportionTOP3()
+        this.top3 = orderBy(data, ['industryCount'], ['desc'])
+      } finally {
+        console.log(`行业占比TOP3`, this.top3)
+      }
+    },
+
+    // 社会关系
+    async getData_relation() {
+      try {
+        const { data } = await getSocialInformation()
+        this.relations = data
+      } finally {
+        console.log(`社会关系`, this.relations)
+      }
+    },
+
     echarts4Init() {
       this.datas.forEach((item, i) => {
         const chart = echarts.init(document.getElementById(`echart${i}`))
@@ -281,6 +311,26 @@ export default {
     echarts5Init() {
       const chart = echarts.init(document.getElementById('echarts5'))
       // 绘制图表
+
+      const thisYear = this.fixedAssets.filter(i => i.yearValue === '今年')
+      const lastYear = this.fixedAssets.filter(i => i.yearValue === '去年')
+      let thisYearVal = []
+      let lastYearVal = []
+      const xAxis = []
+      let thisYearName = '当年'
+      let lastYearName = '同比去年'
+      if (thisYear.length > 0) {
+        thisYearVal = thisYear[0].list.map(i => {
+          xAxis.push(i.monthValue)
+          return Number(i.fixedAssetsTotal)
+        })
+        thisYearName = thisYear[0].yearValue
+      }
+      if (lastYear.length > 0) {
+        lastYearVal = lastYear[0].list.map(i => Number(i.fixedAssetsTotal))
+        lastYearName = lastYear[0].yearValue
+      }
+
       const option = {
         tooltip: {
           trigger: 'axis',
@@ -316,7 +366,7 @@ export default {
           {
             type: 'category',
             boundaryGap: false,
-            data: ['2016', '2017', '2018', '2019', '2020', '2021', '2022'],
+            data: xAxis,
             axisLine: {
               show: true,
               lineStyle: {
@@ -342,7 +392,7 @@ export default {
         ],
         series: [
           {
-            name: '当年',
+            name: thisYearName,
             type: 'line',
             stack: 'Total',
             lineStyle: {
@@ -366,10 +416,10 @@ export default {
             emphasis: {
               focus: 'series'
             },
-            data: [1400, 2320, 1001, 2064, 4000, 3400, 2500]
+            data: thisYearVal
           },
           {
-            name: '同比去年',
+            name: lastYearName,
             type: 'line',
             stack: 'Total',
             smooth: true,
@@ -393,7 +443,7 @@ export default {
             emphasis: {
               focus: 'series'
             },
-            data: [2200, 1320, 1301, 3064, 4400, 3400, 2500]
+            data: lastYearVal
           }
         ]
       }

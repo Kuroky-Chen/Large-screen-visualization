@@ -20,7 +20,7 @@ export const constantRoutes = [
       path: 'dashboard',
       name: 'Dashboard',
       component: () => import('@/views/dashboard/index'),
-      meta: { title: 'Dashboard', icon: 'dashboard' }
+      meta: { title: '芜湖市繁昌区工业互联网平台', icon: 'dashboard' }
     }]
   },
 

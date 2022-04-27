@@ -4,48 +4,12 @@
       <div class="t-left">
         <SubTitle title="企业分布" />
         <div class="box">
-          <div class="title">
-            <div />
-            <div>大型企业</div>
+          <div v-for="(item, i) in enterprises" :key="i" class="title">
+            <div :class="{ i2: i & 1 === 1 }" />
+            <div>{{ item.enterprise }}</div>
             <div>
               <div>
-                <CountTo :start-val="0" :end-val="10000" :duration="8000" separator="" />
-              </div>
-              <div class="unit">
-                家
-              </div>
-            </div>
-          </div>
-          <div class="title">
-            <div class="i2" />
-            <div>中型企业</div>
-            <div>
-              <div>
-                <CountTo :start-val="0" :end-val="10000" :duration="8000" separator="" />
-              </div>
-              <div class="unit">
-                家
-              </div>
-            </div>
-          </div>
-          <div class="title">
-            <div />
-            <div>小型企业</div>
-            <div>
-              <div>
-                <CountTo :start-val="0" :end-val="10000" :duration="8000" separator="" />
-              </div>
-              <div class="unit">
-                家
-              </div>
-            </div>
-          </div>
-          <div class="title">
-            <div class="i2" />
-            <div>微型企业</div>
-            <div>
-              <div>
-                <CountTo :start-val="0" :end-val="10000" :duration="8000" separator="" />
+                <CountTo :start-val="0" :end-val="Number(item.count)" :duration="8000" separator="" />
               </div>
               <div class="unit">
                 家
@@ -57,39 +21,15 @@
       <div class="t-right">
         <SubTitle title="载体类型数据" />
         <div class="box">
-          <div class="title">
-            <div />
-            <div>办公楼</div>
+          <div v-for="(item, i) in carriers" :key="i" class="title">
+            <div :class="`i${i + 1}`" />
+            <div>{{ item.enterprise }}</div>
             <div>
               <div>
-                <CountTo :start-val="0" :end-val="10000" :duration="8000" separator="" />
+                <CountTo :start-val="0" :end-val="Number(item.count)" :duration="8000" separator="" />
               </div>
               <div class="unit">
-                栋
-              </div>
-            </div>
-          </div>
-          <div class="title">
-            <div class="i2" />
-            <div>生产园区</div>
-            <div>
-              <div>
-                <CountTo :start-val="0" :end-val="10000" :duration="8000" separator="" />
-              </div>
-              <div class="unit">
-                个
-              </div>
-            </div>
-          </div>
-          <div class="title">
-            <div class="i3" />
-            <div>公共设施</div>
-            <div>
-              <div>
-                <CountTo :start-val="0" :end-val="10000" :duration="8000" separator="" />
-              </div>
-              <div class="unit">
-                处
+                {{ item.unit }}
               </div>
             </div>
           </div>
@@ -111,7 +51,10 @@
               <div class="bg">
                 <div class="content bounce">
                   <div>计划投资额</div>
-                  <div>8613万</div>
+                  <div>
+                    <CountTo :start-val="0" :end-val="Number(programmes.thisYearPlan)" :duration="8000" separator="" />
+                    万
+                  </div>
                 </div>
               </div>
             </div>
@@ -119,7 +62,10 @@
               <div class="bg">
                 <div class="content bounce">
                   <div>新增投资额</div>
-                  <div>8613万</div>
+                  <div>
+                    <CountTo :start-val="0" :end-val="Number(programmes.thisYearAdd)" :duration="8000" separator="" />
+                    万
+                  </div>
                 </div>
               </div>
             </div>
@@ -127,7 +73,10 @@
               <div class="bg">
                 <div class="content bounce">
                   <div>去年计划投资</div>
-                  <div>8613万</div>
+                  <div>
+                    <CountTo :start-val="0" :end-val="Number(programmes.lastYearPlan)" :duration="8000" separator="" />
+                    万
+                  </div>
                 </div>
               </div>
             </div>
@@ -135,7 +84,10 @@
               <div class="bg">
                 <div class="content bounce">
                   <div>去年新增投资</div>
-                  <div>8613万</div>
+                  <div>
+                    <CountTo :start-val="0" :end-val="Number(programmes.lastYearAdd)" :duration="8000" separator="" />
+                    万
+                  </div>
                 </div>
               </div>
             </div>
@@ -144,12 +96,8 @@
       </div>
       <div class="b-right">
         <SubTitle title="载体分布" />
-        <div id="echarts2" class="box">
-          123
-        </div>
-        <div id="echarts3" class="box">
-          123
-        </div>
+        <div id="echarts2" class="box" />
+        <div id="echarts3" class="box" />
       </div>
     </div>
   </div>
@@ -157,18 +105,85 @@
 
 <script>
 import SubTitle from '@/components/Subtitle'
+import { getEnterpriseDistributionList, getConstructionPlanning, getCarrierTypeList, getArea, getCarrierDistributionList } from '@/api/RegionalPanorama'
 import CountTo from 'vue-count-to'
 import * as echarts from 'echarts'
 
 export default {
   name: 'Left',
   components: { SubTitle, CountTo },
+  data() {
+    return {
+      enterprises: [],
+      carriers: [],
+      areas: {},
+      distributions: [],
+      programmes: {}
+    }
+  },
+  created() {
+    this.getData_enterprise()
+    this.getData_carriers()
+    this.getData_distribution()
+    this.getData_area()
+    this.getData_programme()
+  },
   mounted() {
     this.echarts1Init()
-    this.echarts2Init()
-    this.echarts3Init()
   },
   methods: {
+    // 建设规划
+    async getData_programme() {
+      try {
+        const { data } = await getConstructionPlanning()
+        this.programmes = data
+      } finally {
+        console.log(`建设规划`, this.programmes)
+      }
+    },
+
+    // 面积
+    async getData_area() {
+      try {
+        const { data } = await getArea()
+        this.areas = data
+        this.echarts3Init()
+      } finally {
+        console.log(`面积`, this.areas)
+      }
+    },
+
+    // 载体分布
+    async getData_distribution() {
+      try {
+        const { data } = await getCarrierDistributionList()
+        this.distributions = data
+        this.echarts2Init()
+      } finally {
+        console.log(`载体分布`, this.distributions)
+      }
+    },
+
+    // 载体类型数据
+    async getData_carriers() {
+      try {
+        const { data } = await getCarrierTypeList()
+        this.carriers = data
+      } finally {
+        console.log(`载体类型数据：`, this.carriers)
+      }
+    },
+
+    // 企业分布
+    async getData_enterprise() {
+      try {
+        const { data } = await getEnterpriseDistributionList()
+        this.enterprises = data
+      } finally {
+        console.log(`企业分布：`, this.enterprises)
+      }
+    },
+
     echarts1Init() {
       const chart = echarts.init(document.getElementById('echarts1'))
       // 绘制图表
@@ -253,14 +268,15 @@ export default {
       const chart = echarts.init(document.getElementById('echarts2'))
       // 绘制图表
 
-      const salvProName = [
-        '商业面积',
-        '写字楼面积',
-        '厂房面积',
-        '住宅面积',
-        '公共设施面积'
-      ]
-      const salvProValue = [1355, 1165, 1512, 1772, 5139]
+      this.distributions
+
+      const salvProValue = this.distributions.map(i => i.totalArea)
+      const bgValue = Math.max(...salvProValue)
+      const bgValues = []
+      const salvProName = this.distributions.map(i => {
+        bgValues.push(bgValue * 1.3)
+        return i.name
+      })
       const option = {
         grid: {
           left: '6%',
@@ -347,7 +363,7 @@ export default {
             type: 'bar',
             barWidth: 20,
             barGap: '-100%',
-            data: [8000, 8000, 8000, 8000, 8000],
+            data: bgValues,
             itemStyle: {
               normal: {
                 color: 'rgba(99,202,255,.5)',
@@ -364,6 +380,16 @@ export default {
     echarts3Init() {
       const chart = echarts.init(document.getElementById('echarts3'))
       // 绘制图表
+
+      const data = [
+        this.areas.planningArea,
+        this.areas.underConstructionArea,
+        this.areas.hasBeenBuiltArea,
+        this.areas.pausedArea
+      ]
+      const total = this.areas.planningArea + this.areas.underConstructionArea + this.areas.hasBeenBuiltArea + this.areas.pausedArea
+      const totals = [total, total, total, total]
+
       const option = {
         title: {
           text: '单位： m³',
@@ -404,7 +430,7 @@ export default {
         },
         series: [
           {
-            data: [200, 85, 112, 275],
+            data: data,
             type: 'bar',
             barMaxWidth: 'auto',
             barWidth: 30,
@@ -444,7 +470,7 @@ export default {
             symbolSize: [30, 15]
           },
           {
-            data: [200, 85, 112, 275],
+            data: data,
             type: 'pictorialBar',
             barMaxWidth: '20',
             symbolPosition: 'end',
@@ -454,7 +480,7 @@ export default {
             zlevel: 2
           },
           {
-            data: [741, 741, 741, 741],
+            data: totals,
             type: 'bar',
             barMaxWidth: 'auto',
             barWidth: 30,
@@ -471,7 +497,7 @@ export default {
             zlevel: -2
           },
           {
-            data: [741, 741, 741, 741],
+            data: totals,
             type: 'pictorialBar',
             barMaxWidth: '20',
             symbolPosition: 'end',
@@ -664,9 +690,14 @@ export default {
               position: relative;
 
               .content {
-                top: 0px;
-                left: 30px;
+                top: -22px;
+                width: 100%;
+                height: 100%;
                 position: absolute;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
 
                 &>div {
                   &:nth-child(1) {
