@@ -105,7 +105,7 @@
             <div v-for="(item, i) in distributions" :key="i" class="item">
               <div class="name">{{ item.name }}</div>
               <div class="count">
-                <div><Progress hide-info :percent="item.percent" status="active"
+                <div><Progress hide-info :percent="item.percent * 100" status="active"
                     :stroke-color="['#108ee9', '#77c1f7']" /></progress></div>
                 <div>{{ item.totalArea }} 万元</div>
               </div>
