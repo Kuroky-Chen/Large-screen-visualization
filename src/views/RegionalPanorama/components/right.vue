@@ -117,7 +117,7 @@ import CountTo from 'vue-count-to'
 import * as echarts from 'echarts'
 import 'echarts-liquidfill/src/liquidFill.js'
 import vueSeamlessScroll from 'vue-seamless-scroll'
-import { getSocialInformation, getIndustryProportionTOP3, getRegionalFixedAssetsList, getListedEnterpriseList } from '@/api/RegionalPanorama'
+import { getGroundEffect, getSocialInformation, getIndustryProportionTOP3, getRegionalFixedAssetsList, getListedEnterpriseList } from '@/api/RegionalPanorama'
 import { orderBy } from 'lodash-es'
 
 export default {
@@ -141,7 +141,8 @@ export default {
       listedCompany: [],
       relations: {},
       top3: {},
-      fixedAssets: []
+      fixedAssets: [],
+      assess: {}
     }
   },
   computed: {
@@ -164,11 +165,42 @@ export default {
     this.getData_top3()
     this.getData_overview()
     this.getData_assets()
+    this.getData_assess()
   },
   mounted() {
-    this.echarts4Init()
+
   },
   methods: {
+    // 地效评估
+    async getData_assess() {
+      try {
+        const { data } = await getGroundEffect()
+        this.assess = data
+        this.datas = [{
+          name: '土地\n开发率',
+          value: data.landdevelopmentrate
+        }, {
+          name: '土地\n建成率',
+          value: data.landconstructionrate
+        }, {
+          name: '待建地\n占比',
+          value: data.ratiooflandtobebuilt
+        }, {
+          name: '工业\n用地率',
+          value: data.industriallandratio
+        }, {
+          name: '平均税收',
+          value: data.averagetax
+        }, {
+          name: '平均资产\n投入强度',
+          value: data.averageassetinputintensity
+        }]
+        this.echarts4Init()
+      } finally {
+        console.log(`地效评估`, this.assess)
+      }
+    },
+
     // 区域固定资产总值
     async getData_assets() {
       try {
@@ -222,9 +254,9 @@ export default {
               radius: '70%', // 控制中间圆球的尺寸（此处可以理解为距离外圈圆的距离控制）
               center: ['50%', '50%'],
               data: [
-                0.6,
+                item.value,
                 {
-                  value: 0.6,
+                  value: item.value,
                   direction: 'left' // 波浪方向
                 }
               ], // data个数代表波浪数

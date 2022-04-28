@@ -81,3 +81,12 @@ export function getRegionalFixedAssetsList(data) {
   })
 }
 
+// 查询地效评估
+export function getGroundEffect(data) {
+  return request({
+    url: '/api/basedata/boardRegionalPanoramicInsight/getGroundEffect',
+    method: 'post',
+    data
+  })
+}
+
