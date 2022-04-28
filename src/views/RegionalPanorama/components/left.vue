@@ -4,35 +4,39 @@
       <div class="t-left">
         <SubTitle title="企业分布" />
         <div class="box">
-          <div v-for="(item, i) in enterprises" :key="i" class="title">
-            <div :class="{ i2: i & 1 === 1 }" />
-            <div>{{ item.enterprise }}</div>
-            <div>
+          <vue-seamless-scroll :data="enterprises" class="seamless-warp" :class-option="optionSetting">
+            <div v-for="(item, i) in enterprises" :key="i" class="title">
+              <div :class="{ i2: i & 1 === 1 }" />
+              <div>{{ item.enterprise }}</div>
               <div>
-                <CountTo :start-val="0" :end-val="Number(item.count)" :duration="8000" separator="" />
-              </div>
-              <div class="unit">
-                家
+                <div>
+                  <CountTo :start-val="0" :end-val="Number(item.count)" :duration="8000" separator="" />
+                </div>
+                <div class="unit">
+                  家
+                </div>
               </div>
             </div>
-          </div>
+          </vue-seamless-scroll>
         </div>
       </div>
       <div class="t-right">
         <SubTitle title="载体类型数据" />
         <div class="box">
-          <div v-for="(item, i) in carriers" :key="i" class="title">
-            <div :class="`i${i + 1}`" />
-            <div>{{ item.enterprise }}</div>
-            <div>
+          <vue-seamless-scroll :data="carriers" class="seamless-warp" :class-option="optionSetting">
+            <div v-for="(item, i) in carriers" :key="i" class="title">
+              <div :class="`i${i + 1}`" />
+              <div>{{ item.enterprise }}</div>
               <div>
-                <CountTo :start-val="0" :end-val="Number(item.count)" :duration="8000" separator="" />
-              </div>
-              <div class="unit">
-                {{ item.unit }}
+                <div>
+                  <CountTo :start-val="0" :end-val="Number(item.count)" :duration="8000" separator="" />
+                </div>
+                <div class="unit">
+                  {{ item.unit }}
+                </div>
               </div>
             </div>
-          </div>
+          </vue-seamless-scroll>
         </div>
       </div>
     </div>
@@ -96,7 +100,18 @@
       </div>
       <div class="b-right">
         <SubTitle title="载体分布" />
-        <div id="echarts2" class="box" />
+        <div class="box">
+          <vue-seamless-scroll :data="distributions" class="seamless-warp" :class-option="optionSetting">
+            <div v-for="(item, i) in distributions" :key="i" class="item">
+              <div class="name">{{ item.name }}</div>
+              <div class="count">
+                <div><Progress hide-info :percent="item.percent" status="active"
+                    :stroke-color="['#108ee9', '#77c1f7']" /></progress></div>
+                <div>{{ item.totalArea }} 万元</div>
+              </div>
+            </div>
+          </vue-seamless-scroll>
+        </div>
         <div id="echarts3" class="box" />
       </div>
     </div>
@@ -108,10 +123,11 @@ import SubTitle from '@/components/Subtitle'
 import { getEnterpriseDistributionList, getConstructionPlanning, getCarrierTypeList, getArea, getCarrierDistributionList } from '@/api/RegionalPanorama'
 import CountTo from 'vue-count-to'
 import * as echarts from 'echarts'
+import vueSeamlessScroll from 'vue-seamless-scroll'
 
 export default {
   name: 'Left',
-  components: { SubTitle, CountTo },
+  components: { SubTitle, CountTo, vueSeamlessScroll },
   data() {
     return {
       enterprises: [],
@@ -119,6 +135,21 @@ export default {
       areas: {},
       distributions: [],
       programmes: {}
+    }
+  },
+  computed: {
+    optionSetting() {
+      return {
+        step: 0.5, // 数值越大速度滚动越快
+        limitMoveNum: 2, // 开始无缝滚动的数据量 this.dataList.length
+        hoverStop: true, // 是否开启鼠标悬停stop
+        direction: 1, // 0向下 1向上 2向左 3向右
+        // autoPlay: false,
+        openWatch: true, // 开启数据实时监控刷新dom
+        singleHeight: 0, // 单步运动停止的高度(默认值0是无缝不停止的滚动) direction => 0/1
+        singleWidth: 0, // 单步运动停止的宽度(默认值0是无缝不停止的滚动) direction => 2/3
+        waitTime: 1000 // 单步运动停止的时间(默认值1000ms)
+      }
     }
   },
   created() {
@@ -158,7 +189,8 @@ export default {
       try {
         const { data } = await getCarrierDistributionList()
         this.distributions = data
-        this.echarts2Init()
+        console.log(this.distributions)
+        // this.echarts2Init()
       } finally {
         console.log(`载体分布`, this.distributions)
       }
@@ -524,6 +556,11 @@ export default {
   height: 320px;
 }
 
+.seamless-warp {
+  height: 100%;
+  overflow: hidden;
+}
+
 .bounce {
   animation: custom-bounce .8s infinite 0.5s both;
   transform-origin: center bottom;
@@ -719,6 +756,28 @@ export default {
     .b-right {
       @include chart;
       height: 650px;
+
+      .item {
+        padding: 10px;
+
+        .name {}
+
+        .count {
+          display: flex;
+
+          &>div {
+
+            &:nth-child(1) {
+              flex: 1;
+            }
+
+            &:nth-child(2) {
+              width: 100px;
+              text-align: right;
+            }
+          }
+        }
+      }
 
       &>div {
         &:nth-child(2) {
