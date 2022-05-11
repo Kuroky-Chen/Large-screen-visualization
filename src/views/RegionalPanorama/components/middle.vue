@@ -4,12 +4,19 @@
 
 <script>
 export default {
-  name: 'Middle'
+  name: 'Middle',
+  methods: {
+    init() {
+
+    }
+  }
 }
 </script>
 
 <style lang="scss" scoped>
 .middle {
   width: 1584px;
+  padding: 0 50px;
+  padding-bottom: 50px;
 }
 </style>

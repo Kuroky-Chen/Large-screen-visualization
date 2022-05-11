@@ -105,8 +105,12 @@
             <div v-for="(item, i) in distributions" :key="i" class="item">
               <div class="name">{{ item.name }}</div>
               <div class="count">
-                <div><Progress hide-info :percent="item.percent * 100" status="active"
-                    :stroke-color="['#108ee9', '#77c1f7']" /></progress></div>
+                <div><Progress
+                  hide-info
+                  :percent="item.percent * 100"
+                  status="active"
+                  :stroke-color="['#108ee9', '#77c1f7']"
+                /></progress></div>
                 <div>{{ item.totalArea }} 万元</div>
               </div>
             </div>
@@ -153,16 +157,21 @@ export default {
     }
   },
   created() {
-    this.getData_enterprise()
-    this.getData_carriers()
-    this.getData_distribution()
-    this.getData_area()
-    this.getData_programme()
+    this.init()
   },
   mounted() {
     this.echarts1Init()
   },
   methods: {
+    // 初始化
+    init() {
+      this.getData_enterprise()
+      this.getData_carriers()
+      this.getData_distribution()
+      this.getData_area()
+      this.getData_programme()
+    },
+
     // 建设规划
     async getData_programme() {
       try {
@@ -568,7 +577,11 @@ export default {
 
 .left {
   width: 1100px;
+  height:100%;
   padding-left: 150px;
+  padding-top: 50px;
+  position: relative;
+  background:linear-gradient(270deg,rgba(189,195,199,0.6),rgba(44,62,80,0.6));
 
   .top {
     display: flex;

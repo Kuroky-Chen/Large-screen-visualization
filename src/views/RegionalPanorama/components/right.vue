@@ -161,16 +161,21 @@ export default {
     }
   },
   created() {
-    this.getData_relation()
-    this.getData_top3()
-    this.getData_overview()
-    this.getData_assets()
-    this.getData_assess()
+    this.init()
   },
   mounted() {
 
   },
   methods: {
+    // 初始化
+    init() {
+      this.getData_relation()
+      this.getData_top3()
+      this.getData_overview()
+      this.getData_assets()
+      this.getData_assess()
+    },
+
     // 地效评估
     async getData_assess() {
       try {
@@ -291,7 +296,7 @@ export default {
                 normal: {
                   // formatter: 0.87 * 100 + '\n%',
                   // formatter: 0.6 * 100 + '{d|%}',
-                  formatter: function (params) {
+                  formatter: function(params) {
                     return item.name + '\n' + params.value * 100 + ' %'
                   },
                   rich: {
@@ -491,8 +496,11 @@ export default {
 <style lang="scss" scoped>
 .right-box {
   width: 1100px;
+  height:100%;
   padding-right: 150px;
   display: flex;
+  padding-top: 50px;
+  background:linear-gradient(270deg,rgba(44,62,80,0.6),rgba(189,195,199,0.6));
 
   .left {
     width: 450px;
